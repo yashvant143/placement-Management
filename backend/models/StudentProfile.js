@@ -13,11 +13,47 @@ const studentProfileSchema = new mongoose.Schema(
       default: 'College of Engineering & Technology'
     },
     branch: {
-      type: String,
-      required: true,
-      enum: ['CSE', 'IT', 'CSE-AIML', 'ECE', 'EEE', 'MECH', 'CIVIL', 'OTHER'],
-      default: 'CSE'
-    },
+  type: String,
+  required: true,
+  enum: [
+    'CSE',
+    'IT',
+    'CSE-AIML',
+    'ECE',
+    'EEE',
+    'MECH',
+    'CIVIL',
+    'OTHER',
+    'COMPUTER SCIENCE'
+  ],
+  default: 'CSE',
+  set: function(value) {
+    if (!value) return value;
+
+    const branch = value.trim().toLowerCase();
+
+    const branchMap = {
+      'cse': 'CSE',
+      'computer science': 'COMPUTER SCIENCE',
+      'computer science engineering': 'COMPUTER SCIENCE',
+      'it': 'IT',
+      'information technology': 'IT',
+      'cse-aiml': 'CSE-AIML',
+      'cse aiml': 'CSE-AIML',
+      'computer science and artificial intelligence': 'CSE-AIML',
+      'ece': 'ECE',
+      'electronics and communication engineering': 'ECE',
+      'eee': 'EEE',
+      'electrical and electronics engineering': 'EEE',
+      'mech': 'MECH',
+      'mechanical engineering': 'MECH',
+      'civil': 'CIVIL',
+      'civil engineering': 'CIVIL'
+    };
+
+    return branchMap[branch] || 'OTHER';
+  }
+},
     cgpa: {
       type: Number,
       required: true,
